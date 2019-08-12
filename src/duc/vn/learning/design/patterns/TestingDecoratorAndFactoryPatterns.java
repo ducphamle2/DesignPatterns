@@ -1,25 +1,29 @@
+/*
+ * Problem bayh la cai interface CreatePostFactory hoi bi thua
+ * neu de cai createPost o Post class thi cac subclasses aka Decorators va cac Post subclasses khac 
+ * deu co the access duoc => hoi bi do? 
+ */
+
 package duc.vn.learning.design.patterns;
 
 public class TestingDecoratorAndFactoryPatterns {
 	public static void main(String[] args) {
 		Post post = new NormalPost();
-		post = post.createPost(post, "Nothing", "Cool here");
+		PostFactory postFactory = new PostFactoryBehaviour(); // use this so client can choose between different factories
+		post = post.createPost(post, postFactory);
+		System.out.println(post.getClass().getName());
 		System.out.println(post.getDescription());
 	}
 }
 
 abstract class Post {
-	private PostFactory postFactory = new PostFactoryBehaviour();
 	String description = "Empty post";
 	public String getDescription() {
 		return description;
 	}
 	
-	public Post createPost(Post post, String header, String content) {
-		post = postFactory.createHeader(post, header);
-		post = postFactory.createContent(post, content);
-		post = postFactory.createPictures(post);
-		return post;
+	public Post createPost(Post post, PostFactory postFactory) {
+		return null;
 	}
 }
 
@@ -58,9 +62,35 @@ class PostFactoryBehaviour implements PostFactory {
 }
 
 class NormalPost extends Post {
+	private String header;
+	private String content;
 	
 	public NormalPost() {
 		this.description = "Normal post";
+	}
+
+	public String getHeader() {
+		return header;
+	}
+
+	public void setHeader(String header) {
+		this.header = header;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	@Override
+	public Post createPost(Post post, PostFactory postFactory) {
+		post = postFactory.createHeader(post, header);
+		post = postFactory.createContent(post, content);
+		post = postFactory.createPictures(post);
+		return post;
 	}
 }
 

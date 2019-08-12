@@ -62,7 +62,7 @@ abstract class Duck {
 }
 
 class NoobDuck extends Duck {
-
+	
 	@Override
 	public void display() {
 		fly();
